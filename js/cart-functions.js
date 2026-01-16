@@ -78,18 +78,6 @@ function addCart(productId) {
 
 function showCart() {
     const currentUser = getCurrentUser();
-
-    if (!currentUser) {
-        toast({
-            title: 'Cảnh báo',
-            message: 'Vui lòng đăng nhập để xem giỏ hàng!',
-            type: 'warning',
-            duration: 3000
-        });
-        return;
-    }
-
-    const cart = currentUser.cart || [];
     const cartModal = document.querySelector('.modal-cart');
 
     if (!cartModal) {
@@ -99,12 +87,35 @@ function showCart() {
 
     const cartContent = cartModal.querySelector('.modal-cart-content') || cartModal.querySelector('.modal-container');
 
+    if (!currentUser) {
+        // Show login prompt if not logged in
+        if (cartContent) {
+            cartContent.innerHTML = `
+                <div class="empty-cart">
+                    <i class="fa-light fa-basket-shopping" style="font-size: 80px; color: #999; margin-bottom: 20px;"></i>
+                    <h3>Bạn chưa đăng nhập</h3>
+                    <p>Vui lòng đăng nhập để xem giỏ hàng và đặt món!</p>
+                    <button onclick="closeCart(); document.getElementById('login').click();" style="padding: 12px 24px; background: var(--red); color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">
+                        Đăng nhập ngay
+                    </button>
+                </div>
+            `;
+        }
+        return;
+    }
+
+    const cart = currentUser.cart || [];
+
     if (cart.length === 0) {
         if (cartContent) {
             cartContent.innerHTML = `
                 <div class="empty-cart">
-                    <img src="./img/empty-order.jpg" alt="Giỏ hàng trống">
+                    <img src="./img/empty-order.jpg" alt="Giỏ hàng trống" onerror="this.style.display='none'">
+                    <i class="fa-light fa-basket-shopping" style="font-size: 80px; color: #999; margin-bottom: 20px;"></i>
                     <p>Giỏ hàng của bạn đang trống</p>
+                    <button onclick="closeCart();" style="padding: 12px 24px; background: var(--red); color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">
+                        Tiếp tục mua sắm
+                    </button>
                 </div>
             `;
         }
@@ -249,7 +260,11 @@ function dathangngay() {
     const dathangBtn = document.querySelector('.button-dathangngay');
     if (!dathangBtn) return;
 
-    dathangBtn.addEventListener('click', function() {
+    // Remove old listener if exists (prevent duplicate listeners)
+    const newBtn = dathangBtn.cloneNode(true);
+    dathangBtn.parentNode.replaceChild(newBtn, dathangBtn);
+
+    newBtn.addEventListener('click', function() {
         const productId = parseInt(this.dataset.product);
 
         // Add to cart first

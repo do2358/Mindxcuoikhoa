@@ -79,3 +79,5 @@ docs
 plans
 .repomixignore
 CLAUDE.md
+scripts/*
+
