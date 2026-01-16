@@ -1,0 +1,22 @@
+{
+  "name": "quan-ngon",
+  "version": "1.0.0",
+  "description": "Vietnamese Food Ordering System - Quán Ngon",
+  "scripts": {
+    "dev": "npx http-server -p 8000",
+    "preview": "npx http-server -p 8000"
+  },
+  "keywords": [
+    "food",
+    "vietnamese",
+    "ordering",
+    "restaurant",
+    "e-commerce"
+  ],
+  "author": "Hoàng Gia Bảo",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hgbaodev/quan-ngon"
+  }
+}
